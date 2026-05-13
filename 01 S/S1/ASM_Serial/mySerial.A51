@@ -1,12 +1,17 @@
 
 ;============  Initial Serial Port   ============
-Initial_Serial:	MOV	TMOD,#00100001B	; T1M2 T0M1
-		MOV	SCON,#01010000B	; Serial Mode1
-		MOV	TH1,#-3	; 9600 FDH@18.432MHz
+Initial_Serial:	MOV	TMOD,#55H	; T1M2 T0M1 0010 0101
+		MOV	SCON,#50H	; Serial Mode1£
 		MOV	A,#00H 	; FBH@18.432MHz
 		MOV	PCON,A	; SMOD = 0
+		
+		MOV	T2CON,#34H
+		MOV	RCAP2H,#0FFH
+		MOV	RCAP2L,#0DCH
+		
 		CLR	EA	; Disable All 
-		SETB	TR1	; Start Timer1
+		SETB	TR0	; Start Timer1
+		SETB	TR1
 		RET		
 			
 ;==========  Send Data to Serial Port   ==========

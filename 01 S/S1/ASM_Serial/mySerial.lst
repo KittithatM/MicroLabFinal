@@ -20,47 +20,47 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
     1:
     2:				;============  Initial Serial Port   ============
-    3:	  0000	75 89 21	Initial_Serial:	MOV	TMOD,#00100001B	; T1M2 T0M1
-    4:	  0003	75 98 50			MOV	SCON,#01010000B	; Serial Mode1
-    5:	  0006	75 8D FB			MOV	TH1,#0FBH	; 9600 FDH@18.432MHz
-    6:	  0009	74 FD				MOV	A,#-3 	; FBH@18.432MHz
+    3:	  0000	75 89 55	Initial_Serial:	MOV	TMOD,#55H	; T1M2 T0M1
+    4:	  0003	75 98 50			MOV	SCON,#50H	; Serial Mode1
+    5:	  0006	75 8D FD			MOV	TH1,#-3	; 9600 FDH@18.432MHz
+    6:	  0009	74 00				MOV	A,#00H 	; FBH@18.432MHz
     7:	  000B	F5 87				MOV	PCON,A	; SMOD = 0
-    8:	  000D	C2 AF				CLR	EA	; Disable All
-    9:	  000F	D2 8E				SETB	TR1	; Start Timer1
-   10:	  0011	22				RET
-   11:
-   12:				;==========  Send Data to Serial Port   ==========
-   13:	  0012	C0 E0		SEND_2HEX:	PUSH	Acc
-   14:	  0014	C4				SWAP	A
-   15:	  0015	12 00 1A			CALL	SEND_1HEX
-   16:	  0018	D0 E0				POP	Acc
-   17:	  001A	C0 83		SEND_1HEX:	PUSH	DPH
-   18:	  001C	C0 82				PUSH	DPL
-   19:	  001E	90 00 38			MOV	DPTR,#HEXASC_TAB
-   20:	  0021	54 0F				ANL	A,#0FH
-   21:	  0023	93				MOVC	A,@A+DPTR
-   22:	  0024	D0 82				POP	DPL
-   23:	  0026	D0 83				POP	DPH
-   24:	  0028	C0 A8		SEND_ASCII:	PUSH	IE
-   25:	  002A	C2 AC				CLR	ES
-   26:	  002C	C2 99				CLR    	TI
-   27:	  002E	F5 99				MOV    	SBUF,A
-   28:	  0030	30 99 FD			JNB    	TI,$
-   29:	  0033	C2 99				CLR    	TI
-   30:	  0035	D0 A8				POP	IE
-   31:	  0037	22				RET
-   32:	  0038	30 31 32 33	HEXASC_TAB: 	DB	'0123456789ABCDEF'
-	  003C	34 35 36 37
-	  0040	38 39 41 42
-	  0044	43 44 45 46
-   33:
-   34:				;=========   Send Line Feed =================
-   35:	  0048	74 0D		Send_LineFeed:	MOV	A,#0DH
-   36:	  004A	11 28				CALL	Send_ASCII
-   37:	  004C	74 0A				MOV	A,#0AH
-   38:	  004E	11 28				CALL	Send_ASCII
-   39:	  0050	22				RET
-   40:
+    8:
+    9:	  000D	75 00 34			MOV	T2CON,#34H
+							^
+			  @@@@@ symbol not defined @@@@@
+
+   10:	  0010	75 00 FF			MOV	RCAP2H,#0FFH
+							^
+			  @@@@@ symbol not defined @@@@@
+
+   11:	  0013	75 00 DC			MOV	RCAP2L,#0DCH
+							^
+			  @@@@@ symbol not defined @@@@@
+
+   12:
+   13:	  0016	C2 AF				CLR	EA	; Disable All
+   14:	  0018	D2 8C				SETB	TR0	; Start Timer1
+   15:	  001A	D2 8E				SETB	TR1
+   16:	  001C	22				RET
+   17:
+   18:				;==========  Send Data to Serial Port   ==========
+   19:	  001D	C0 E0		SEND_2HEX:	PUSH	Acc
+   20:	  001F	C4				SWAP	A
+   21:	  0020	12 00 25			CALL	SEND_1HEX
+   22:	  0023	D0 E0				POP	Acc
+   23:	  0025	C0 83		SEND_1HEX:	PUSH	DPH
+   24:	  0027	C0 82				PUSH	DPL
+   25:	  0029	90 00 43			MOV	DPTR,#HEXASC_TAB
+   26:	  002C	54 0F				ANL	A,#0FH
+   27:	  002E	93				MOVC	A,@A+DPTR
+   28:	  002F	D0 82				POP	DPL
+   29:	  0031	D0 83				POP	DPH
+   30:	  0033	C0 A8		SEND_ASCII:	PUSH	IE
+   31:	  0035	C2 AC				CLR	ES
+   32:	  0037	C2 99				CLR    	TI
+   33:	  0039	F5 99				MOV    	SBUF,A
+   34:	  003B	30 99 FD			JNB    	TI,$
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
 
@@ -68,38 +68,53 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-   41:				;========  Send Line Feed ==================
-   42:	  0051	74 0C		Send_ClrScr:	MOV	A,#0CH
-   43:	  0053	11 28				CALL	Send_ASCII
-   44:	  0055	22				RET
-   45:
-   46:				;== Send Data Table to Serial Start@DPTR to '00H' =
-   47:	  0056	E4		Send_Table:	CLR	A
-   48:	  0057	93				MOVC	A,@A+DPTR
-   49:	  0058	60 05				JZ	_X_Send_Tab
-   50:	  005A	11 28				CALL	SEND_ASCII
-   51:	  005C	A3				INC	DPTR
-   52:	  005D	80 F7				JMP	Send_Table
-   53:	  005F	22		_X_Send_Tab:	RET
-   54:
-   55:				;========= Send 1-Byte@Acc to SERIAL =========
-   56:	  0060	C0 A8		TX_BYTE:	PUSH	IE
-   57:	  0062	C2 AC				CLR	ES
-   58:	  0064	C2 99				CLR	TI
-   59:	  0066	F5 99				MOV	SBUF,A
-   60:	  0068	30 99 FD			JNB	TI,$
-   61:	  006B	C2 99				CLR	TI
-   62:	  006D	D0 A8				POP	IE
-   63:	  006F	22				RET
-   64:
-   65:				;====== Receive Data From SERIAL to Acc ========
-   66:	  0070	C0 A8		RX_BYTE:	PUSH	IE
-   67:	  0072	C2 AC				CLR	ES
-   68:	  0074	30 98 FD			JNB	RI,$	; Wait data
-   69:	  0077	C2 98				CLR	RI
-   70:	  0079	E5 99				MOV	A,SBUF
-   71:	  007B	D0 A8				POP	IE
-   72:	  007D	22				RET
+   35:	  003E	C2 99				CLR    	TI
+   36:	  0040	D0 A8				POP	IE
+   37:	  0042	22				RET
+   38:	  0043	30 31 32 33	HEXASC_TAB: 	DB	'0123456789ABCDEF'
+	  0047	34 35 36 37
+	  004B	38 39 41 42
+	  004F	43 44 45 46
+   39:
+   40:				;=========   Send Line Feed =================
+   41:	  0053	74 0D		Send_LineFeed:	MOV	A,#0DH
+   42:	  0055	11 33				CALL	Send_ASCII
+   43:	  0057	74 0A				MOV	A,#0AH
+   44:	  0059	11 33				CALL	Send_ASCII
+   45:	  005B	22				RET
+   46:
+   47:				;========  Send Line Feed ==================
+   48:	  005C	74 0C		Send_ClrScr:	MOV	A,#0CH
+   49:	  005E	11 33				CALL	Send_ASCII
+   50:	  0060	22				RET
+   51:
+   52:				;== Send Data Table to Serial Start@DPTR to '00H' =
+   53:	  0061	E4		Send_Table:	CLR	A
+   54:	  0062	93				MOVC	A,@A+DPTR
+   55:	  0063	60 05				JZ	_X_Send_Tab
+   56:	  0065	11 33				CALL	SEND_ASCII
+   57:	  0067	A3				INC	DPTR
+   58:	  0068	80 F7				JMP	Send_Table
+   59:	  006A	22		_X_Send_Tab:	RET
+   60:
+   61:				;========= Send 1-Byte@Acc to SERIAL =========
+   62:	  006B	C0 A8		TX_BYTE:	PUSH	IE
+   63:	  006D	C2 AC				CLR	ES
+   64:	  006F	C2 99				CLR	TI
+   65:	  0071	F5 99				MOV	SBUF,A
+   66:	  0073	30 99 FD			JNB	TI,$
+   67:	  0076	C2 99				CLR	TI
+   68:	  0078	D0 A8				POP	IE
+   69:	  007A	22				RET
+   70:
+   71:				;====== Receive Data From SERIAL to Acc ========
+   72:	  007B	C0 A8		RX_BYTE:	PUSH	IE
+   73:	  007D	C2 AC				CLR	ES
+   74:	  007F	30 98 FD			JNB	RI,$	; Wait data
+   75:	  0082	C2 98				CLR	RI
+   76:	  0084	E5 99				MOV	A,SBUF
+   77:	  0086	D0 A8				POP	IE
+   78:	  0088	22				RET
 								^
 			  @@@@@ no END statement found @@@@@
 
@@ -109,13 +124,18 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
 
                      register banks used:  ---
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
 
-                     1 error detected
+
+
+
+                     4 errors detected
 
 
 
 
-ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
 
 
 
@@ -144,7 +164,7 @@ EX1				  BIT	      AA
 EXTI0				  CODE	    0003
 EXTI1				  CODE	    0013
 F0				  BIT	      D5
-HEXASC_TAB			  CODE	    0038	  32
+HEXASC_TAB			  CODE	    0043	  38
 IE				  DATA	      A8
 IE0				  BIT	      89
 IE1				  BIT	      8B
@@ -175,22 +195,22 @@ RI				  BIT	      98
 RS0				  BIT	      D3
 RS1				  BIT	      D4
 RXD				  BIT	      B0
-RX_BYTE				  CODE	    0070	  66
+RX_BYTE				  CODE	    007B	  72
 SBUF				  DATA	      99
 
-ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
 
 
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
 SCON				  DATA	      98
-SEND_1HEX			  CODE	    001A	  17
-SEND_2HEX			  CODE	    0012	  13
-SEND_ASCII			  CODE	    0028	  24
-SEND_CLRSCR			  CODE	    0051	  42
-SEND_LINEFEED			  CODE	    0048	  35
-SEND_TABLE			  CODE	    0056	  47
+SEND_1HEX			  CODE	    0025	  23
+SEND_2HEX			  CODE	    001D	  19
+SEND_ASCII			  CODE	    0033	  30
+SEND_CLRSCR			  CODE	    005C	  48
+SEND_LINEFEED			  CODE	    0053	  41
+SEND_TABLE			  CODE	    0061	  53
 SINT				  CODE	    0023
 SM0				  BIT	      9F
 SM1				  BIT	      9E
@@ -213,6 +233,6 @@ TMOD				  DATA	      89
 TR0				  BIT	      8C
 TR1				  BIT	      8E
 TXD				  BIT	      B1
-TX_BYTE				  CODE	    0060	  56
+TX_BYTE				  CODE	    006B	  62
 WR				  BIT	      B6
-_X_SEND_TAB			  CODE	    005F	  53
+_X_SEND_TAB			  CODE	    006A	  59

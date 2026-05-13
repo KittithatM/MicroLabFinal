@@ -45,13 +45,13 @@ while(True):
     request = conn.recv(1024).decode('utf-8')
     
     if '/?led0=on' in request:
-        led.value(1)
+        led0.value(1)
     if '/?led0=off' in request:
-        led.value(0)
+        led0.value(0)
     if '/?led1=on' in request:
-        led.value(1)
+        led1.value(1)
     if '/?led1=off' in request:
-        led.value(0)
+        led1.value(0)
     
     response = web_page()
     conn.send('HTTP/1.1 200 OK\nContent-Type: text/html\n\n' + response)

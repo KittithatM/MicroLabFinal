@@ -10,9 +10,9 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
 
 
-	Source File:	C:\Users\losoo\Downloads\Final_Micro_Open All\Final_Data\ASM_Serial\Serial.Asm
-	Object File:	C:\Users\losoo\Downloads\Final_Micro_Open All\Final_Data\ASM_Serial\Serial.hex
-	List File:	C:\Users\losoo\Downloads\Final_Micro_Open All\Final_Data\ASM_Serial\Serial.lst
+	Source File:	C:\Users\losoo\Downloads\MicroFinalQuiz\01 S\S1\ASM_Serial\Serial.Asm
+	Object File:	C:\Users\losoo\Downloads\MicroFinalQuiz\01 S\S1\ASM_Serial\Serial.hex
+	List File:	C:\Users\losoo\Downloads\MicroFinalQuiz\01 S\S1\ASM_Serial\Serial.lst
 
 
 
@@ -34,33 +34,33 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
    14:		N      0100			ORG	0100H
    15:	  0100	75 81 3F			MOV	SP,#3FH
    16:	  0103	C2 AF				CLR	EA
-   17:	  0105	12 01 77			CALL	Delay_250M
-   18:	  0108	12 01 A4			CALL	Initial_Serial
-   19:	  010B	12 01 F5			CALL	Send_ClrScr
-   20:	  010E	90 12 34			MOV	DPTR,#1234H
-   21:	  0111	85 83 34			MOV	CounterH,DPH
-   22:	  0114	85 82 35			MOV	CounterL,DPL
-   23:
-   24:	  0117	90 02 BC	Main_Loop:	MOV	DPTR,#Header_Fram
-   25:	  011A	12 01 FA			CALL	Send_Table
-   26:
-   27:	  011D	E5 34				MOV	A,CounterH
-   28:	  011F	12 01 B6			CALL	Send_2HEX
-   29:	  0122	E5 35				MOV	A,CounterL
-   30:	  0124	12 01 B6			CALL	Send_2HEX
-   31:
-   32:	  0127	74 2C				MOV	A,#','
-   33:	  0129	12 01 CC			CALL	Send_ASCII
-   34:
-   35:	  012C	85 34 83			MOV	DPH,CounterH
-   36:	  012F	85 35 82			MOV	DPL,CounterL
-   37:	  0132	12 02 22			CALL	DPTR2BCD	; DPTR(H) --> B-DPH-DPL(BCD)
-   38:	  0135	E5 F0				MOV	A,B
-   39:	  0137	12 01 B6			CALL	Send_2HEX
-   40:	  013A	E5 83				MOV	A,DPH
-   41:	  013C	12 01 B6			CALL	Send_2HEX
-   42:	  013F	E5 82				MOV	A,DPL
-   43:	  0141	12 01 B6			CALL	Send_2HEX
+   17:	  0105	12 01 A0			CALL	Delay_250M
+   18:	  0108	12 01 CD			CALL	Initial_Serial
+   19:	  010B	12 02 26			CALL	Send_ClrScr
+   20:
+   21:	  010E			Main_Loop:
+   22:	  010E	90 02 ED			MOV	DPTR,#Header_Fram
+   23:	  0111	12 02 2B			CALL	Send_Table
+   24:
+   25:	  0114	85 8C 34			MOV	CounterH,TH0
+   26:	  0117	85 8A 35			MOV	CounterL,TL0
+   27:	  011A	E5 34				MOV	A,CounterH
+   28:	  011C	12 01 E7			CALL	Send_2HEX
+   29:	  011F	E5 35				MOV	A,CounterL
+   30:	  0121	12 01 E7			CALL	Send_2HEX
+   31:	  0124	74 2C				MOV	A,#','
+   32:	  0126	12 01 FD			CALL	Send_ASCII
+   33:	  0129	85 34 83			MOV	DPH,CounterH
+   34:	  012C	85 35 82			MOV	DPL,CounterL
+   35:	  012F	12 02 53			CALL	DPTR2BCD	; DPTR(H) --> B-DPH-DPL(BCD)
+   36:	  0132	E5 F0				MOV	A,B
+   37:	  0134	12 01 E7			CALL	Send_2HEX
+   38:	  0137	E5 83				MOV	A,DPH
+   39:	  0139	12 01 E7			CALL	Send_2HEX
+   40:	  013C	E5 82				MOV	A,DPL
+   41:	  013E	12 01 E7			CALL	Send_2HEX
+   42:
+   43:	  0141	90 02 F3			MOV	DPTR,#D2323
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
 
@@ -68,62 +68,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-   44:
-   45:	  0144	12 01 EC			CALL	Send_LineFeed
-   46:	  0147	B2 B7				CPL	PortO_LEDGreen
-   47:
-   48:	  0149	85 34 83			MOV	DPH,CounterH
-   49:	  014C	85 35 82			MOV	DPL,CounterL
-   50:	  014F	A3				INC	DPTR
-   51:	  0150	85 83 34			MOV	CounterH,DPH
-   52:	  0153	85 82 35			MOV	CounterL,DPL
-   53:
-   54:	  0156	12 01 70			CALL	Delay_500M
-   55:
-   56:	  0159	80 BC				JMP	Main_Loop
-   57:
-   58:				$INCLUDE (myDelay.A51)
-   59: 1
-   60: 1			;############################################
-   61: 1			;#************************************************
-   62: 1			;#      All Delay for XTAL 18.432MHz 12Clk/MC
-   63: 1			;#************************************************
-   64: 1  015B	C0 07		DELAY_4SEC:	PUSH	07H	; Delay 80*50MilliSec
-   65: 1  015D	7F 50				MOV	R7,#80	;  = 4000MilliSec
-   66: 1  015F	02 01 8C			JMP	_DELAY_50M
-   67: 1
-   68: 1  0162	C0 07		DELAY_2SEC:	PUSH	07H	; Delay 40*50MilliSec
-   69: 1  0164	7F 28				MOV	R7,#40	;  = 2000MilliSec
-   70: 1  0166	02 01 8C			JMP	_DELAY_50M
-   71: 1
-   72: 1  0169	C0 07		DELAY_1SEC:	PUSH	07H	; Delay 20*50MilliSec
-   73: 1  016B	7F 14				MOV	R7,#20	;  = 1000MilliSec
-   74: 1  016D	02 01 8C			JMP	_DELAY_50M
+   44:	  0144	12 02 2B			CALL	Send_Table
+   45:
+   46:	  0147	85 8D 34			MOV	CounterH,TH1
+   47:	  014A	85 8B 35			MOV	CounterL,TL1
+   48:	  014D	E5 34				MOV	A,CounterH
+   49:	  014F	12 01 E7			CALL	Send_2HEX
+   50:	  0152	E5 35				MOV	A,CounterL
+   51:	  0154	12 01 E7			CALL	Send_2HEX
+   52:	  0157	74 2C				MOV	A,#','
+   53:	  0159	12 01 FD			CALL	Send_ASCII
+   54:	  015C	85 34 83			MOV	DPH,CounterH
+   55:	  015F	85 35 82			MOV	DPL,CounterL
+   56:	  0162	12 02 53			CALL	DPTR2BCD	; DPTR(H) --> B-DPH-DPL(BCD)
+   57:	  0165	E5 F0				MOV	A,B
+   58:	  0167	12 01 E7			CALL	Send_2HEX
+   59:	  016A	E5 83				MOV	A,DPH
+   60:	  016C	12 01 E7			CALL	Send_2HEX
+   61:	  016F	E5 82				MOV	A,DPL
+   62:	  0171	12 01 E7			CALL	Send_2HEX
+   63:
+   64:	  0174	90 02 FD			MOV	DPTR,#EDDD
+   65:	  0177	12 02 2B			CALL	Send_Table
+   66:
+   67:	  017A	12 02 1D			CALL	Send_LineFeed
+   68:	  017D	B2 B7				CPL	PortO_LEDGreen
+   69:
+   70:	  017F	12 01 99			CALL	Delay_500M
+   71:
+   72:	  0182	80 8A				JMP	Main_Loop
+   73:
+   74:				$INCLUDE (myDelay.A51)
    75: 1
-   76: 1  0170	C0 07		DELAY_500M:	PUSH	07H	; Delay 10*50MilliSec
-   77: 1  0172	7F 0A				MOV	R7,#10	;  = 500MilliSec
-   78: 1  0174	02 01 8C			JMP	_DELAY_50M
-   79: 1
-   80: 1  0177	C0 07		DELAY_250M:	PUSH	07H	; Delay 5*50 MilliSec
-   81: 1  0179	7F 05				MOV	R7,#5	;  = 250 MilliSec
-   82: 1  017B	02 01 8C			JMP	_DELAY_50M
+   76: 1			;############################################
+   77: 1			;#************************************************
+   78: 1			;#      All Delay for XTAL 18.432MHz 12Clk/MC
+   79: 1			;#************************************************
+   80: 1  0184	C0 07		DELAY_4SEC:	PUSH	07H	; Delay 80*50MilliSec
+   81: 1  0186	7F 50				MOV	R7,#80	;  = 4000MilliSec
+   82: 1  0188	02 01 B5			JMP	_DELAY_50M
    83: 1
-   84: 1  017E	C0 07		DELAY_100M:	PUSH	07H	; Delay 2*50 MilliSec
-   85: 1  0180	7F 02				MOV	R7,#2	;  = 100 MilliSec
-   86: 1  0182	02 01 8C			JMP	_DELAY_50M
+   84: 1  018B	C0 07		DELAY_2SEC:	PUSH	07H	; Delay 40*50MilliSec
+   85: 1  018D	7F 28				MOV	R7,#40	;  = 2000MilliSec
+   86: 1  018F	02 01 B5			JMP	_DELAY_50M
    87: 1
-   88: 1  0185	C0 07		DELAY_50M:	PUSH	07H	; Delay 1*50 MilliSec
-   89: 1  0187	7F 01				MOV	R7,#1	;  = 50 MilliSec
-   90: 1  0189	02 01 8C			JMP	_DELAY_50M
+   88: 1  0192	C0 07		DELAY_1SEC:	PUSH	07H	; Delay 20*50MilliSec
+   89: 1  0194	7F 14				MOV	R7,#20	;  = 1000MilliSec
+   90: 1  0196	02 01 B5			JMP	_DELAY_50M
    91: 1
-   92: 1
-   93: 1  018C	C0 E0		_DELAY_50M:	PUSH	Acc
-   94: 1  018E	C0 F0				PUSH	B
-   95: 1  0190	75 F0 C8	_DELAY_050M:	MOV	B,#200	; Delay 50 MilliSec
-   96: 1  0193	74 72		_DELAY_250U:	MOV	A,#114	; 1MC ,250 uSec
-   97: 1  0195	D5 E0 FD			DJNZ	Acc,$	; 2MC ,(192-1)*0.651*2 = 250 uSec
-   98: 1  0198	D5 F0 F8			DJNZ	B,_DELAY_250U 	; 250*200=50mS
-   99: 1  019B	DF F3				DJNZ	R7,_DELAY_050M	; 50*5 =250mS
+   92: 1  0199	C0 07		DELAY_500M:	PUSH	07H	; Delay 10*50MilliSec
+   93: 1  019B	7F 0A				MOV	R7,#10	;  = 500MilliSec
+   94: 1  019D	02 01 B5			JMP	_DELAY_50M
+   95: 1
+   96: 1  01A0	C0 07		DELAY_250M:	PUSH	07H	; Delay 5*50 MilliSec
+   97: 1  01A2	7F 05				MOV	R7,#5	;  = 250 MilliSec
+   98: 1  01A4	02 01 B5			JMP	_DELAY_50M
+   99: 1
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
 
@@ -131,62 +131,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  100: 1  019D	D0 F0				POP	B
-  101: 1  019F	D0 E0				POP	Acc
-  102: 1  01A1	D0 07				POP	07H
-  103: 1  01A3	22				RET
-  104:				$INCLUDE (mySerial.A51)
-  105: 1
-  106: 1			;============  Initial Serial Port   ============
-  107: 1  01A4	75 89 21	Initial_Serial:	MOV	TMOD,#00100001B	; T1M2 T0M1
-  108: 1  01A7	75 98 50			MOV	SCON,#01010000B	; Serial Mode1
-  109: 1  01AA	75 8D FD			MOV	TH1,#-3	; 9600 FDH@18.432MHz
-  110: 1  01AD	74 00				MOV	A,#00H 	; FBH@18.432MHz
-  111: 1  01AF	F5 87				MOV	PCON,A	; SMOD = 0
-  112: 1  01B1	C2 AF				CLR	EA	; Disable All
-  113: 1  01B3	D2 8E				SETB	TR1	; Start Timer1
-  114: 1  01B5	22				RET
-  115: 1
-  116: 1			;==========  Send Data to Serial Port   ==========
-  117: 1  01B6	C0 E0		SEND_2HEX:	PUSH	Acc
-  118: 1  01B8	C4				SWAP	A
-  119: 1  01B9	12 01 BE			CALL	SEND_1HEX
-  120: 1  01BC	D0 E0				POP	Acc
-  121: 1  01BE	C0 83		SEND_1HEX:	PUSH	DPH
-  122: 1  01C0	C0 82				PUSH	DPL
-  123: 1  01C2	90 01 DC			MOV	DPTR,#HEXASC_TAB
-  124: 1  01C5	54 0F				ANL	A,#0FH
-  125: 1  01C7	93				MOVC	A,@A+DPTR
-  126: 1  01C8	D0 82				POP	DPL
-  127: 1  01CA	D0 83				POP	DPH
-  128: 1  01CC	C0 A8		SEND_ASCII:	PUSH	IE
-  129: 1  01CE	C2 AC				CLR	ES
-  130: 1  01D0	C2 99				CLR    	TI
-  131: 1  01D2	F5 99				MOV    	SBUF,A
-  132: 1  01D4	30 99 FD			JNB    	TI,$
-  133: 1  01D7	C2 99				CLR    	TI
-  134: 1  01D9	D0 A8				POP	IE
-  135: 1  01DB	22				RET
-  136: 1  01DC	30 31 32 33	HEXASC_TAB: 	DB	'0123456789ABCDEF'
-       1  01E0	34 35 36 37
-       1  01E4	38 39 41 42
-       1  01E8	43 44 45 46
-  137: 1
-  138: 1			;=========   Send Line Feed =================
-  139: 1  01EC	74 0D		Send_LineFeed:	MOV	A,#0DH
-  140: 1  01EE	31 CC				CALL	Send_ASCII
-  141: 1  01F0	74 0A				MOV	A,#0AH
-  142: 1  01F2	31 CC				CALL	Send_ASCII
-  143: 1  01F4	22				RET
-  144: 1
-  145: 1			;========  Send Line Feed ==================
-  146: 1  01F5	74 0C		Send_ClrScr:	MOV	A,#0CH
-  147: 1  01F7	31 CC				CALL	Send_ASCII
-  148: 1  01F9	22				RET
-  149: 1
-  150: 1			;== Send Data Table to Serial Start@DPTR to '00H' =
-  151: 1  01FA	E4		Send_Table:	CLR	A
-  152: 1  01FB	93				MOVC	A,@A+DPTR
+  100: 1  01A7	C0 07		DELAY_100M:	PUSH	07H	; Delay 2*50 MilliSec
+  101: 1  01A9	7F 02				MOV	R7,#2	;  = 100 MilliSec
+  102: 1  01AB	02 01 B5			JMP	_DELAY_50M
+  103: 1
+  104: 1  01AE	C0 07		DELAY_50M:	PUSH	07H	; Delay 1*50 MilliSec
+  105: 1  01B0	7F 01				MOV	R7,#1	;  = 50 MilliSec
+  106: 1  01B2	02 01 B5			JMP	_DELAY_50M
+  107: 1
+  108: 1
+  109: 1  01B5	C0 E0		_DELAY_50M:	PUSH	Acc
+  110: 1  01B7	C0 F0				PUSH	B
+  111: 1  01B9	75 F0 C8	_DELAY_050M:	MOV	B,#200	; Delay 50 MilliSec
+  112: 1  01BC	74 72		_DELAY_250U:	MOV	A,#114	; 1MC ,250 uSec
+  113: 1  01BE	D5 E0 FD			DJNZ	Acc,$	; 2MC ,(192-1)*0.651*2 = 250 uSec
+  114: 1  01C1	D5 F0 F8			DJNZ	B,_DELAY_250U 	; 250*200=50mS
+  115: 1  01C4	DF F3				DJNZ	R7,_DELAY_050M	; 50*5 =250mS
+  116: 1  01C6	D0 F0				POP	B
+  117: 1  01C8	D0 E0				POP	Acc
+  118: 1  01CA	D0 07				POP	07H
+  119: 1  01CC	22				RET
+  120:				$INCLUDE (mySerial.A51)
+  121: 1
+  122: 1			;============  Initial Serial Port   ============
+  123: 1  01CD	75 89 55	Initial_Serial:	MOV	TMOD,#55H	; T1M2 T0M1 0010 0101
+  124: 1  01D0	75 98 50			MOV	SCON,#50H	; Serial Mode1£
+  125: 1  01D3	74 00				MOV	A,#00H 	; FBH@18.432MHz
+  126: 1  01D5	F5 87				MOV	PCON,A	; SMOD = 0
+  127: 1
+  128: 1  01D7	75 C8 34			MOV	T2CON,#34H
+  129: 1  01DA	75 CB FF			MOV	RCAP2H,#0FFH
+  130: 1  01DD	75 CA DC			MOV	RCAP2L,#0DCH
+  131: 1
+  132: 1  01E0	C2 AF				CLR	EA	; Disable All
+  133: 1  01E2	D2 8C				SETB	TR0	; Start Timer1
+  134: 1  01E4	D2 8E				SETB	TR1
+  135: 1  01E6	22				RET
+  136: 1
+  137: 1			;==========  Send Data to Serial Port   ==========
+  138: 1  01E7	C0 E0		SEND_2HEX:	PUSH	Acc
+  139: 1  01E9	C4				SWAP	A
+  140: 1  01EA	12 01 EF			CALL	SEND_1HEX
+  141: 1  01ED	D0 E0				POP	Acc
+  142: 1  01EF	C0 83		SEND_1HEX:	PUSH	DPH
+  143: 1  01F1	C0 82				PUSH	DPL
+  144: 1  01F3	90 02 0D			MOV	DPTR,#HEXASC_TAB
+  145: 1  01F6	54 0F				ANL	A,#0FH
+  146: 1  01F8	93				MOVC	A,@A+DPTR
+  147: 1  01F9	D0 82				POP	DPL
+  148: 1  01FB	D0 83				POP	DPH
+  149: 1  01FD	C0 A8		SEND_ASCII:	PUSH	IE
+  150: 1  01FF	C2 AC				CLR	ES
+  151: 1  0201	C2 99				CLR    	TI
+  152: 1  0203	F5 99				MOV    	SBUF,A
+  153: 1  0205	30 99 FD			JNB    	TI,$
+  154: 1  0208	C2 99				CLR    	TI
+  155: 1  020A	D0 A8				POP	IE
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
 
@@ -194,62 +194,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  153: 1  01FC	60 05				JZ	_X_Send_Tab
-  154: 1  01FE	31 CC				CALL	SEND_ASCII
-  155: 1  0200	A3				INC	DPTR
-  156: 1  0201	80 F7				JMP	Send_Table
-  157: 1  0203	22		_X_Send_Tab:	RET
+  156: 1  020C	22				RET
+  157: 1  020D	30 31 32 33	HEXASC_TAB: 	DB	'0123456789ABCDEF'
+       1  0211	34 35 36 37
+       1  0215	38 39 41 42
+       1  0219	43 44 45 46
   158: 1
-  159: 1			;========= Send 1-Byte@Acc to SERIAL =========
-  160: 1  0204	C0 A8		TX_BYTE:	PUSH	IE
-  161: 1  0206	C2 AC				CLR	ES
-  162: 1  0208	C2 99				CLR	TI
-  163: 1  020A	F5 99				MOV	SBUF,A
-  164: 1  020C	30 99 FD			JNB	TI,$
-  165: 1  020F	C2 99				CLR	TI
-  166: 1  0211	D0 A8				POP	IE
-  167: 1  0213	22				RET
-  168: 1
-  169: 1			;====== Receive Data From SERIAL to Acc ========
-  170: 1  0214	C0 A8		RX_BYTE:	PUSH	IE
-  171: 1  0216	C2 AC				CLR	ES
-  172: 1  0218	30 98 FD			JNB	RI,$	; Wait data
-  173: 1  021B	C2 98				CLR	RI
-  174: 1  021D	E5 99				MOV	A,SBUF
-  175: 1  021F	D0 A8				POP	IE
-  176: 1  0221	22				RET
-  177:				$INCLUDE (myHex2BCD.A51)
-  178: 1
+  159: 1			;=========   Send Line Feed =================
+  160: 1  021D	74 0D		Send_LineFeed:	MOV	A,#0DH
+  161: 1  021F	31 FD				CALL	Send_ASCII
+  162: 1  0221	74 0A				MOV	A,#0AH
+  163: 1  0223	31 FD				CALL	Send_ASCII
+  164: 1  0225	22				RET
+  165: 1
+  166: 1			;========  Send Line Feed ==================
+  167: 1  0226	74 0C		Send_ClrScr:	MOV	A,#0CH
+  168: 1  0228	31 FD				CALL	Send_ASCII
+  169: 1  022A	22				RET
+  170: 1
+  171: 1			;== Send Data Table to Serial Start@DPTR to '00H' =
+  172: 1  022B	E4		Send_Table:	CLR	A
+  173: 1  022C	93				MOVC	A,@A+DPTR
+  174: 1  022D	60 05				JZ	_X_Send_Tab
+  175: 1  022F	31 FD				CALL	SEND_ASCII
+  176: 1  0231	A3				INC	DPTR
+  177: 1  0232	80 F7				JMP	Send_Table
+  178: 1  0234	22		_X_Send_Tab:	RET
   179: 1
-  180: 1  0222	7F 00		DPTR2BCD:	MOV	R7,#0
-  181: 1  0224	7E 00				MOV	R6,#0
-  182: 1  0226	AD 83				MOV	R5,DPH
-  183: 1  0228	AC 82				MOV	R4,DPL
-  184: 1  022A	78 30				MOV	R0,#DBufffer_4Byte
-  185: 1					; Input  : R7,R6,R5,R4(HEX)
-  186: 1					; Output : @R0+0 +1 +2 +3(BCD)
-  187: 1  022C	12 02 6A			CALL	HEX2BCD_4Byte
-  188: 1  022F	78 31				MOV	R0,#DBufffer_4Byte+1
-  189: 1  0231	E6				MOV	A,@R0
-  190: 1  0232	F5 F0				MOV	B,A
-  191: 1  0234	08				INC	R0
-  192: 1  0235	E6				MOV	A,@R0
-  193: 1  0236	F5 83				MOV	DPH,A
-  194: 1  0238	08				INC	R0
-  195: 1  0239	E6				MOV	A,@R0
-  196: 1  023A	F5 82				MOV	DPL,A
-  197: 1  023C	22				RET
-  198: 1
-  199: 1			;==============================================================
-  200: 1			;             Four Byte x One Byte
-  201: 1			;      Input  :    R6,R5,R4,R3 x R0
-  202: 1			;      Output : R7,R6,R5,R4,R3
-  203: 1			;==============================================================
-  204: 1  023D	00		MUL_4Byte_1Byte:	NOP
-  205: 1			;-------------------------------------
-  206: 1  023E	E8		_M_4B1B_Byte1:	MOV	A,R0
-  207: 1  023F	8B F0				MOV	B,R3
-  208: 1  0241	A4				MUL	AB
+  180: 1			;========= Send 1-Byte@Acc to SERIAL =========
+  181: 1  0235	C0 A8		TX_BYTE:	PUSH	IE
+  182: 1  0237	C2 AC				CLR	ES
+  183: 1  0239	C2 99				CLR	TI
+  184: 1  023B	F5 99				MOV	SBUF,A
+  185: 1  023D	30 99 FD			JNB	TI,$
+  186: 1  0240	C2 99				CLR	TI
+  187: 1  0242	D0 A8				POP	IE
+  188: 1  0244	22				RET
+  189: 1
+  190: 1			;====== Receive Data From SERIAL to Acc ========
+  191: 1  0245	C0 A8		RX_BYTE:	PUSH	IE
+  192: 1  0247	C2 AC				CLR	ES
+  193: 1  0249	30 98 FD			JNB	RI,$	; Wait data
+  194: 1  024C	C2 98				CLR	RI
+  195: 1  024E	E5 99				MOV	A,SBUF
+  196: 1  0250	D0 A8				POP	IE
+  197: 1  0252	22				RET
+  198:				$INCLUDE (myHex2BCD.A51)
+  199: 1
+  200: 1
+  201: 1  0253	7F 00		DPTR2BCD:	MOV	R7,#0
+  202: 1  0255	7E 00				MOV	R6,#0
+  203: 1  0257	AD 83				MOV	R5,DPH
+  204: 1  0259	AC 82				MOV	R4,DPL
+  205: 1  025B	78 30				MOV	R0,#DBufffer_4Byte
+  206: 1					; Input  : R7,R6,R5,R4(HEX)
+  207: 1					; Output : @R0+0 +1 +2 +3(BCD)
+  208: 1  025D	12 02 9B			CALL	HEX2BCD_4Byte
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
 
@@ -257,62 +257,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  209: 1  0242	FB				MOV	R3,A	; Byte1
-  210: 1  0243	A9 F0				MOV	R1,B
-  211: 1			;-------------------------------------
-  212: 1  0245	E8		_M_4B1B_Byte2:	MOV	A,R0
-  213: 1  0246	8C F0				MOV	B,R4
-  214: 1  0248	A4				MUL	AB
-  215: 1  0249	C3				CLR	C
-  216: 1  024A	29				ADD	A,R1
-  217: 1  024B	FC				MOV	R4,A	; Byte2
-  218: 1  024C	74 00				MOV	A,#00
-  219: 1  024E	35 F0				ADDC	A,B
-  220: 1  0250	F9				MOV	R1,A
-  221: 1			;-------------------------------------
-  222: 1  0251	E8		_M_4B1B_Byte3:	MOV	A,R0
-  223: 1  0252	8D F0				MOV	B,R5
-  224: 1  0254	A4				MUL	AB
-  225: 1  0255	C3				CLR	C
-  226: 1  0256	29				ADD	A,R1
-  227: 1  0257	FD				MOV	R5,A	; Byte3
-  228: 1  0258	74 00				MOV	A,#00
-  229: 1  025A	35 F0				ADDC	A,B
-  230: 1  025C	F9				MOV	R1,A
-  231: 1			;-------------------------------------
-  232: 1  025D	E8		_M_4B1B_Byte4:	MOV	A,R0
-  233: 1  025E	8E F0				MOV	B,R6
-  234: 1  0260	A4				MUL	AB
-  235: 1  0261	C3				CLR	C
-  236: 1  0262	29				ADD	A,R1
-  237: 1  0263	FE				MOV	R6,A	; Byte4
-  238: 1  0264	74 00				MOV	A,#00
-  239: 1  0266	35 F0				ADDC	A,B
-  240: 1  0268	FF				MOV	R7,A	; Byte5
-  241: 1  0269	22				RET
-  242: 1
-  243: 1			;==============================================================
-  244: 1			;             Four Byte Hex to BCD Converstor
-  245: 1			;      Input  : R7,R6,R5,R4(HEX)
-  246: 1			;      Output : @R0+0 +1 +2 +3(BCD)
-  247: 1			;==============================================================
-  248: 1  026A	E4		HEX2BCD_4Byte: 	CLR	A
-  249: 1  026B	F6		            	MOV 	@R0,A	; MSB
-  250: 1  026C	08		            	INC	R0
-  251: 1  026D	F6		            	MOV  	@R0,A
-  252: 1  026E	08		            	INC	R0
-  253: 1  026F	F6		            	MOV 	@R0,A
-  254: 1  0270	08		            	INC	R0
-  255: 1  0271	F6		            	MOV  	@R0,A	; LSB
-  256: 1  0272	A9 00		            	MOV	R1,00H	; Back Up R0
-  257: 1
-  258: 1  0274	75 83 20	            	MOV  	DPH,#32D        ; Data 32 Bits(4Byte)
-  259: 1  0277	EC		_HEXTOBCD01_4B: MOV   	A,R4
-  260: 1  0278	33		            	RLC   	A
-  261: 1  0279	FC		            	MOV   	R4,A
-  262: 1  027A	ED		            	MOV  	A,R5
-  263: 1  027B	33		            	RLC  	A
-  264: 1  027C	FD		            	MOV    	R5,A
+  209: 1  0260	78 31				MOV	R0,#DBufffer_4Byte+1
+  210: 1  0262	E6				MOV	A,@R0
+  211: 1  0263	F5 F0				MOV	B,A
+  212: 1  0265	08				INC	R0
+  213: 1  0266	E6				MOV	A,@R0
+  214: 1  0267	F5 83				MOV	DPH,A
+  215: 1  0269	08				INC	R0
+  216: 1  026A	E6				MOV	A,@R0
+  217: 1  026B	F5 82				MOV	DPL,A
+  218: 1  026D	22				RET
+  219: 1
+  220: 1			;==============================================================
+  221: 1			;             Four Byte x One Byte
+  222: 1			;      Input  :    R6,R5,R4,R3 x R0
+  223: 1			;      Output : R7,R6,R5,R4,R3
+  224: 1			;==============================================================
+  225: 1  026E	00		MUL_4Byte_1Byte:	NOP
+  226: 1			;-------------------------------------
+  227: 1  026F	E8		_M_4B1B_Byte1:	MOV	A,R0
+  228: 1  0270	8B F0				MOV	B,R3
+  229: 1  0272	A4				MUL	AB
+  230: 1  0273	FB				MOV	R3,A	; Byte1
+  231: 1  0274	A9 F0				MOV	R1,B
+  232: 1			;-------------------------------------
+  233: 1  0276	E8		_M_4B1B_Byte2:	MOV	A,R0
+  234: 1  0277	8C F0				MOV	B,R4
+  235: 1  0279	A4				MUL	AB
+  236: 1  027A	C3				CLR	C
+  237: 1  027B	29				ADD	A,R1
+  238: 1  027C	FC				MOV	R4,A	; Byte2
+  239: 1  027D	74 00				MOV	A,#00
+  240: 1  027F	35 F0				ADDC	A,B
+  241: 1  0281	F9				MOV	R1,A
+  242: 1			;-------------------------------------
+  243: 1  0282	E8		_M_4B1B_Byte3:	MOV	A,R0
+  244: 1  0283	8D F0				MOV	B,R5
+  245: 1  0285	A4				MUL	AB
+  246: 1  0286	C3				CLR	C
+  247: 1  0287	29				ADD	A,R1
+  248: 1  0288	FD				MOV	R5,A	; Byte3
+  249: 1  0289	74 00				MOV	A,#00
+  250: 1  028B	35 F0				ADDC	A,B
+  251: 1  028D	F9				MOV	R1,A
+  252: 1			;-------------------------------------
+  253: 1  028E	E8		_M_4B1B_Byte4:	MOV	A,R0
+  254: 1  028F	8E F0				MOV	B,R6
+  255: 1  0291	A4				MUL	AB
+  256: 1  0292	C3				CLR	C
+  257: 1  0293	29				ADD	A,R1
+  258: 1  0294	FE				MOV	R6,A	; Byte4
+  259: 1  0295	74 00				MOV	A,#00
+  260: 1  0297	35 F0				ADDC	A,B
+  261: 1  0299	FF				MOV	R7,A	; Byte5
+  262: 1  029A	22				RET
+  263: 1
+  264: 1			;==============================================================
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
 
@@ -320,65 +320,90 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  265: 1  027D	EE		            	MOV   	A,R6
-  266: 1  027E	33		            	RLC    	A
-  267: 1  027F	FE		            	MOV    	R6,A
-  268: 1  0280	EF		            	MOV   	A,R7
-  269: 1  0281	33		            	RLC   	A
-  270: 1  0282	FF		            	MOV    	R7,A
-  271: 1
-  272: 1  0283	75 82 04	            	MOV   	DPL,#04D	; 3Byte Output
-  273: 1  0286	A8 01		            	MOV   	R0,01H		; Index To Address@R0
-  274: 1  0288	E6		_HEXTOBCD02_4B: MOV     A,@R0
-  275: 1  0289	35 E0		            	ADDC 	A,Acc
-  276: 1  028B	D4		            	DA   	A
-  277: 1  028C	F6		            	MOV   	@R0,A
-  278: 1  028D	18		            	DEC	R0
-  279: 1  028E	D5 82 F7	            	DJNZ  	DPL,_HEXTOBCD02_4B
-  280: 1  0291	D5 83 E3	            	DJNZ   	DPH,_HEXTOBCD01_4B
-  281: 1  0294	22		            	RET
-  282: 1
-  283: 1
-  284: 1			;#######################################################################
-  285: 1			;======================================================================
-  286: 1			;  Converse DPTR(HEX) to BCD ==> Hex lessthan 270FH(9999)
-  287: 1			;======================================================================
-  288: 1  0295	AC 83		DPTR_HEX2BCD:	MOV	R4,DPH	; Load Input
-  289: 1  0297	AB 82				MOV	R3,DPL
-  290: 1  0299	7E 00				MOV	R6,#0	; Clear H_Output
-  291: 1  029B	7F 00				MOV	R7,#0	; Clear L_Output
-  292: 1  029D	75 83 10	            	MOV 	DPH,#16D        	; Data 2Byte(16 Bits)
-  293: 1  02A0	EB		_DPTR_HEX2BCD01:MOV  	A,R3
-  294: 1  02A1	33		            	RLC  	A
-  295: 1  02A2	FB		            	MOV  	R3,A
-  296: 1  02A3	EC		            	MOV  	A,R4
-  297: 1  02A4	33		            	RLC   	A
-  298: 1  02A5	FC		            	MOV  	R4,A
-  299: 1  02A6	75 82 02	            	MOV  	DPL,#02D        	; 2Byte Output
-  300: 1  02A9	78 07		            	MOV    	R0,#07H	; Index To Address@R0
-  301: 1  02AB	E6		_DPTR_HEX2BCD02: MOV 	A,@R0
-  302: 1  02AC	35 E0		            	ADDC  	A,Acc
-  303: 1  02AE	D4		            	DA    	A
-  304: 1  02AF	F6		            	MOV   	@R0,A
-  305: 1  02B0	18		            	DEC	R0
-  306: 1  02B1	D5 82 F7	            	DJNZ  	DPL,_DPTR_HEX2BCD02
-  307: 1  02B4	D5 83 E9	            	DJNZ  	DPH,_DPTR_HEX2BCD01
-  308: 1  02B7	8E 83		            	MOV	DPH,R6
-  309: 1  02B9	8F 82		            	MOV	DPL,R7
-  310: 1  02BB	22		            	RET
-  311:
-  312:	  02BC	44 61 74 61	Header_Fram:	DB	'Data Counter = ',00
-	  02C0	20 43 6F 75
-	  02C4	6E 74 65 72
-	  02C8	20 3D 20 00
-  313:
-  314:
-  315:						END
-
-
+  265: 1			;             Four Byte Hex to BCD Converstor
+  266: 1			;      Input  : R7,R6,R5,R4(HEX)
+  267: 1			;      Output : @R0+0 +1 +2 +3(BCD)
+  268: 1			;==============================================================
+  269: 1  029B	E4		HEX2BCD_4Byte: 	CLR	A
+  270: 1  029C	F6		            	MOV 	@R0,A	; MSB
+  271: 1  029D	08		            	INC	R0
+  272: 1  029E	F6		            	MOV  	@R0,A
+  273: 1  029F	08		            	INC	R0
+  274: 1  02A0	F6		            	MOV 	@R0,A
+  275: 1  02A1	08		            	INC	R0
+  276: 1  02A2	F6		            	MOV  	@R0,A	; LSB
+  277: 1  02A3	A9 00		            	MOV	R1,00H	; Back Up R0
+  278: 1
+  279: 1  02A5	75 83 20	            	MOV  	DPH,#32D        ; Data 32 Bits(4Byte)
+  280: 1  02A8	EC		_HEXTOBCD01_4B: MOV   	A,R4
+  281: 1  02A9	33		            	RLC   	A
+  282: 1  02AA	FC		            	MOV   	R4,A
+  283: 1  02AB	ED		            	MOV  	A,R5
+  284: 1  02AC	33		            	RLC  	A
+  285: 1  02AD	FD		            	MOV    	R5,A
+  286: 1  02AE	EE		            	MOV   	A,R6
+  287: 1  02AF	33		            	RLC    	A
+  288: 1  02B0	FE		            	MOV    	R6,A
+  289: 1  02B1	EF		            	MOV   	A,R7
+  290: 1  02B2	33		            	RLC   	A
+  291: 1  02B3	FF		            	MOV    	R7,A
+  292: 1
+  293: 1  02B4	75 82 04	            	MOV   	DPL,#04D	; 3Byte Output
+  294: 1  02B7	A8 01		            	MOV   	R0,01H		; Index To Address@R0
+  295: 1  02B9	E6		_HEXTOBCD02_4B: MOV     A,@R0
+  296: 1  02BA	35 E0		            	ADDC 	A,Acc
+  297: 1  02BC	D4		            	DA   	A
+  298: 1  02BD	F6		            	MOV   	@R0,A
+  299: 1  02BE	18		            	DEC	R0
+  300: 1  02BF	D5 82 F7	            	DJNZ  	DPL,_HEXTOBCD02_4B
+  301: 1  02C2	D5 83 E3	            	DJNZ   	DPH,_HEXTOBCD01_4B
+  302: 1  02C5	22		            	RET
+  303: 1
+  304: 1
+  305: 1			;#######################################################################
+  306: 1			;======================================================================
+  307: 1			;  Converse DPTR(HEX) to BCD ==> Hex lessthan 270FH(9999)
+  308: 1			;======================================================================
+  309: 1  02C6	AC 83		DPTR_HEX2BCD:	MOV	R4,DPH	; Load Input
+  310: 1  02C8	AB 82				MOV	R3,DPL
+  311: 1  02CA	7E 00				MOV	R6,#0	; Clear H_Output
+  312: 1  02CC	7F 00				MOV	R7,#0	; Clear L_Output
+  313: 1  02CE	75 83 10	            	MOV 	DPH,#16D        	; Data 2Byte(16 Bits)
+  314: 1  02D1	EB		_DPTR_HEX2BCD01:MOV  	A,R3
+  315: 1  02D2	33		            	RLC  	A
+  316: 1  02D3	FB		            	MOV  	R3,A
+  317: 1  02D4	EC		            	MOV  	A,R4
+  318: 1  02D5	33		            	RLC   	A
+  319: 1  02D6	FC		            	MOV  	R4,A
+  320: 1  02D7	75 82 02	            	MOV  	DPL,#02D        	; 2Byte Output
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
 
+
+
+ Line  I  Addr  Code            Source
+
+  321: 1  02DA	78 07		            	MOV    	R0,#07H	; Index To Address@R0
+  322: 1  02DC	E6		_DPTR_HEX2BCD02: MOV 	A,@R0
+  323: 1  02DD	35 E0		            	ADDC  	A,Acc
+  324: 1  02DF	D4		            	DA    	A
+  325: 1  02E0	F6		            	MOV   	@R0,A
+  326: 1  02E1	18		            	DEC	R0
+  327: 1  02E2	D5 82 F7	            	DJNZ  	DPL,_DPTR_HEX2BCD02
+  328: 1  02E5	D5 83 E9	            	DJNZ  	DPH,_DPTR_HEX2BCD01
+  329: 1  02E8	8E 83		            	MOV	DPH,R6
+  330: 1  02EA	8F 82		            	MOV	DPL,R7
+  331: 1  02EC	22		            	RET
+  332:
+  333:	  02ED	44 32 32 20	Header_Fram:	DB	'D22 [',00
+	  02F1	5B 00
+  334:	  02F3	5D 20 7C 20	D2323:		DB	'] | D23 [',00
+	  02F7	44 32 33 20
+	  02FB	5B 00
+  335:	  02FD	5D 00		EDDD:		DB	']',00
+  336:
+  337:
+  338:						END
 
 
 
@@ -411,19 +436,21 @@ B				  DATA	      F0
 COUNTERH			  NUMBER    0034	   6
 COUNTERL			  NUMBER    0035	   7
 CY				  BIT	      D7
+D2323				  CODE	    02F3	 334
 DBUFFFER_4BYTE			  NUMBER    0030	   5
-DELAY_100M			  CODE	    017E	  84
-DELAY_1SEC			  CODE	    0169	  72
-DELAY_250M			  CODE	    0177	  80
-DELAY_2SEC			  CODE	    0162	  68
-DELAY_4SEC			  CODE	    015B	  64
-DELAY_500M			  CODE	    0170	  76
-DELAY_50M			  CODE	    0185	  88
+DELAY_100M			  CODE	    01A7	 100
+DELAY_1SEC			  CODE	    0192	  88
+DELAY_250M			  CODE	    01A0	  96
+DELAY_2SEC			  CODE	    018B	  84
+DELAY_4SEC			  CODE	    0184	  80
+DELAY_500M			  CODE	    0199	  92
+DELAY_50M			  CODE	    01AE	 104
 DPH				  DATA	      83
 DPL				  DATA	      82
-DPTR2BCD			  CODE	    0222	 180
-DPTR_HEX2BCD			  CODE	    0295	 288
+DPTR2BCD			  CODE	    0253	 201
+DPTR_HEX2BCD			  CODE	    02C6	 309
 EA				  BIT	      AF
+EDDD				  CODE	    02FD	 335
 ES				  BIT	      AC
 ET0				  BIT	      A9
 ET1				  BIT	      AB
@@ -432,27 +459,25 @@ EX1				  BIT	      AA
 EXTI0				  CODE	    0003
 EXTI1				  CODE	    0013
 F0				  BIT	      D5
-HEADER_FRAM			  CODE	    02BC	 312
-HEX2BCD_4BYTE			  CODE	    026A	 248
-HEXASC_TAB			  CODE	    01DC	 136
+HEADER_FRAM			  CODE	    02ED	 333
+HEX2BCD_4BYTE			  CODE	    029B	 269
+HEXASC_TAB			  CODE	    020D	 157
 IE				  DATA	      A8
 IE0				  BIT	      89
 IE1				  BIT	      8B
-INITIAL_SERIAL			  CODE	    01A4	 107
+INITIAL_SERIAL			  CODE	    01CD	 123
 INT0				  BIT	      B2
 INT1				  BIT	      B3
 IP				  DATA	      B8
 IT0				  BIT	      88
 IT1				  BIT	      8A
-MAIN_LOOP			  CODE	    0117	  24
-MUL_4BYTE_1BYTE			  CODE	    023D	 204
+MAIN_LOOP			  CODE	    010E	  21
+MUL_4BYTE_1BYTE			  CODE	    026E	 225
 OV				  BIT	      D2
 P				  BIT	      D0
 P0				  DATA	      80
 P1				  DATA	      90
 P2				  DATA	      A0
-P3				  DATA	      B0
-PCON				  DATA	      87
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
 
@@ -460,6 +485,8 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
+P3				  DATA	      B0
+PCON				  DATA	      87
 PORTO_LEDGREEN			  NUMBER    00B7	   9
 PS				  BIT	      BC
 PSW				  DATA	      D0
@@ -477,15 +504,15 @@ RI				  BIT	      98
 RS0				  BIT	      D3
 RS1				  BIT	      D4
 RXD				  BIT	      B0
-RX_BYTE				  CODE	    0214	 170
+RX_BYTE				  CODE	    0245	 191
 SBUF				  DATA	      99
 SCON				  DATA	      98
-SEND_1HEX			  CODE	    01BE	 121
-SEND_2HEX			  CODE	    01B6	 117
-SEND_ASCII			  CODE	    01CC	 128
-SEND_CLRSCR			  CODE	    01F5	 146
-SEND_LINEFEED			  CODE	    01EC	 139
-SEND_TABLE			  CODE	    01FA	 151
+SEND_1HEX			  CODE	    01EF	 142
+SEND_2HEX			  CODE	    01E7	 138
+SEND_ASCII			  CODE	    01FD	 149
+SEND_CLRSCR			  CODE	    0226	 167
+SEND_LINEFEED			  CODE	    021D	 160
+SEND_TABLE			  CODE	    022B	 172
 SINT				  CODE	    0023
 SM0				  BIT	      9F
 SM1				  BIT	      9E
@@ -509,13 +536,11 @@ TMOD				  DATA	      89
 TR0				  BIT	      8C
 TR1				  BIT	      8E
 TXD				  BIT	      B1
-TX_BYTE				  CODE	    0204	 160
+TX_BYTE				  CODE	    0235	 181
 WR				  BIT	      B6
-_DELAY_050M			  CODE	    0190	  95
-_DELAY_250U			  CODE	    0193	  96
-_DELAY_50M			  CODE	    018C	  93
-_DPTR_HEX2BCD01			  CODE	    02A0	 293
-_DPTR_HEX2BCD02			  CODE	    02AB	 301
+_DELAY_050M			  CODE	    01B9	 111
+_DELAY_250U			  CODE	    01BC	 112
+_DELAY_50M			  CODE	    01B5	 109
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
 
@@ -523,10 +548,12 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
-_HEXTOBCD01_4B			  CODE	    0277	 259
-_HEXTOBCD02_4B			  CODE	    0288	 274
-_M_4B1B_BYTE1			  CODE	    023E	 206
-_M_4B1B_BYTE2			  CODE	    0245	 212
-_M_4B1B_BYTE3			  CODE	    0251	 222
-_M_4B1B_BYTE4			  CODE	    025D	 232
-_X_SEND_TAB			  CODE	    0203	 157
+_DPTR_HEX2BCD01			  CODE	    02D1	 314
+_DPTR_HEX2BCD02			  CODE	    02DC	 322
+_HEXTOBCD01_4B			  CODE	    02A8	 280
+_HEXTOBCD02_4B			  CODE	    02B9	 295
+_M_4B1B_BYTE1			  CODE	    026F	 227
+_M_4B1B_BYTE2			  CODE	    0276	 233
+_M_4B1B_BYTE3			  CODE	    0282	 243
+_M_4B1B_BYTE4			  CODE	    028E	 253
+_X_SEND_TAB			  CODE	    0234	 178
