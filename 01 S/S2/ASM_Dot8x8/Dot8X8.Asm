@@ -8,6 +8,7 @@ DataBuffer	EQU	20H	;8Byte Buffer
 MxBoard_DIN	EQU	P3.4
 MxBoard_CS	EQU	P3.3
 MxBoard_CLK	EQU	P3.2
+SEG		EQU	P1
 
 PortO_LEDGreen	EQU	P3.7	
 	
@@ -20,96 +21,113 @@ PortO_LEDGreen	EQU	P3.7
 		CALL	Delay_250M	
 		CALL	Initial_Max7219	
 		CALL	Initial_Serial
+		MOV	SEG,#0C0H
 		
 Main_Loop:
 		CLR	C
 		CALL	RX_BYTE
 		;INC	A
-		CJNE	A,#'0',S0
 		
 S0:
 		CJNE	A,#'0',S1
 		MOV	DPTR,#TB_00
 		CALL	Send_2_Dot
+		MOV	SEG,#0C0H
 		JMP	Main_Loop
 S1:
 		CJNE	A,#'1',S2
 		MOV	DPTR,#TB_01
 		CALL	Send_2_Dot
+		MOV	SEG,#0F9H
 		JMP	Main_Loop
 S2:
 		CJNE	A,#'2',S3
 		MOV	DPTR,#TB_02
 		CALL	Send_2_Dot
+		MOV	SEG,#0A4H
 		JMP	Main_Loop
 S3:
 		CJNE	A,#'3',S4
 		MOV	DPTR,#TB_03
 		CALL	Send_2_Dot
+		MOV	SEG,#0B0H
 		JMP	Main_Loop
 S4:
 		CJNE	A,#'4',S5
 		MOV	DPTR,#TB_04
 		CALL	Send_2_Dot
+		MOV	SEG,#099H
 		JMP	Main_Loop
 S5:
 		CJNE	A,#'5',S6
 		MOV	DPTR,#TB_05
 		CALL	Send_2_Dot
+		MOV	SEG,#092H
 		JMP	Main_Loop
 S6:
 		CJNE	A,#'6',S7
 		MOV	DPTR,#TB_06
 		CALL	Send_2_Dot
+		MOV	SEG,#082H
 		JMP	Main_Loop
 S7:
 		CJNE	A,#'7',S8
 		MOV	DPTR,#TB_07
 		CALL	Send_2_Dot
+		MOV	SEG,#0F8H
 		JMP	Main_Loop
 S8:
 		CJNE	A,#'8',S9
 		MOV	DPTR,#TB_08
 		CALL	Send_2_Dot
+		MOV	SEG,#080H
 		JMP	Main_Loop
 S9:
 		CJNE	A,#'9',SA
 		MOV	DPTR,#TB_09
 		CALL	Send_2_Dot
+		MOV	SEG,#090H
 		JMP	Main_Loop
 SA:
 		CJNE	A,#'A',SB
 		MOV	DPTR,#TB_0A
 		CALL	Send_2_Dot
+		MOV	SEG,#088H
 		JMP	Main_Loop
 SB:
 		CJNE	A,#'B',SC
 		MOV	DPTR,#TB_0B
 		CALL	Send_2_Dot
+		MOV	SEG,#083H
 		JMP	Main_Loop
 SC:
 		CJNE	A,#'C',SD
 		MOV	DPTR,#TB_0C
 		CALL	Send_2_Dot
+		MOV	SEG,#0C6H
 		JMP	Main_Loop
 SD:
 		CJNE	A,#'D',SE
 		MOV	DPTR,#TB_0D
 		CALL	Send_2_Dot
+		MOV	SEG,#0A1H
 		JMP	Main_Loop
 SE:
 		CJNE	A,#'E',SF
 		MOV	DPTR,#TB_0E
 		CALL	Send_2_Dot
+		MOV	SEG,#086H
 		JMP	Main_Loop
 SF:
 		CJNE	A,#'F',SOO
 		MOV	DPTR,#TB_0F
 		CALL	Send_2_Dot
+		MOV	SEG,#08EH
 		JMP	Main_Loop
 SOO:
 		MOV	DPTR,#SBB
 		CALL	Send_2_Dot
+		MOV	SEG,#0FFH
 		JMP	Main_Loop
 
 $INCLUDE (myDelay.A51)

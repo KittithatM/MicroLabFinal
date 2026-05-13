@@ -27,67 +27,57 @@ void setup() {
   display_Data(Data22, Data23);
 }
 
+uint8_t lastButtons = 0; // ตัวแปรนี้ต้องอยู่นอก loop เพื่อจำค่าเดิม
+
 void loop() {
+  // 1. เช็คปุ่มเริ่มทำงาน (ทำงานอิสระ ไม่โดนขวาง)
   if (digitalRead(pin_StartSW) == LOW) pulseGenerate();
 
-  uint8_t buttons = tm.readButtons();
-  if (buttons != 0) {
-    // ตรวจสอบแยกบิตเพื่อให้กดพร้อมกันได้ หรือลดโอกาสการข้ามบิต
-    if (buttons & 0x01) Data22 += 1000;
-    if (buttons & 0x02) Data22 += 100;
-    if (buttons & 0x04) Data22 += 10;
-    if (buttons & 0x08) Data22 += 1;
-    if (buttons & 0x10) Data23 += 1000;
-    if (buttons & 0x20) Data23 += 100;
-    if (buttons & 0x40) Data23 += 10;
-    if (buttons & 0x80) Data23 += 1;
+  // 2. อ่านค่าปุ่มจาก TM1638
+  uint8_t currentButtons = tm.readButtons();
+
+  // 3. ตรวจสอบ: "สถานะเปลี่ยนไปจากรอบที่แล้ว" และ "รอบนี้มีการกด (ไม่ใช่ปล่อย)"
+  if (currentButtons != lastButtons && currentButtons != 0) {
+    
+    // ตรวจสอบทีละบิต (ใช้ currentButtons เช็คได้เลย)
+    if ((currentButtons >> 0) & 1) Data22 += 1000;
+    if ((currentButtons >> 1) & 1) Data22 += 100;
+    if ((currentButtons >> 2) & 1) Data22 += 10;
+    if ((currentButtons >> 3) & 1) Data22 += 1;
+    if ((currentButtons >> 4) & 1) Data23 += 1000;
+    if ((currentButtons >> 5) & 1) Data23 += 100;
+    if ((currentButtons >> 6) & 1) Data23 += 10;
+    if ((currentButtons >> 7) & 1) Data23 += 1;
 
     display_Data(Data22, Data23);
-
-    // ใช้ delay ที่สั้นลงเพื่อให้ loop วนกลับมาเช็คปุ่มได้ไวขึ้น
-    delay(120);
-  } else {
-    // อัปเดตหน้าจอเฉพาะเมื่อถึงเวลาที่กำหนด (Non-blocking)
-    if (millis() - startTime >= 1500) {
-      display_Data(Data22, Data23);
-    }
+    
+    // ใส่ delay สั้นๆ แค่ 10-20ms เพื่อป้องกันสัญญาณกระเพื่อม (Debounce)
+    delay(20); 
   }
+
+  // 4. อัปเดตค่าสถานะล่าสุดเพื่อใช้เทียบในรอบถัดไป
+  lastButtons = currentButtons;
 }
 
 void pulseGenerate() {
-  // สร้างตัวแปรนับรอบเพื่อไม่ให้ update หน้าจอบ่อยเกินไป
-  int refreshCounter = 0;
-
-  while ((Data22 > 0) || (Data23 > 0)) {
+  while ((Data22 > 0) | (Data23 > 0)) {
     if (Data22 > 0) {
       digitalWrite(pin_pulseOut22, LOW);
-      Data22--;
+      Data22 -= 1;
     }
     if (Data23 > 0) {
       digitalWrite(pin_pulseOut23, LOW);
-      Data23--;
+      Data23 -= 1;
     }
-
-    delay(10);  // ลดเวลา pulse width ลงเล็กน้อยเพื่อความไว
+    delay(20);
     digitalWrite(pin_pulseOut22, HIGH);
     digitalWrite(pin_pulseOut23, HIGH);
-    delay(10);
-
-    // อัปเดตหน้าจอทุกๆ 10 pulse เพื่อลดภาระ CPU และการกวนสัญญาณ
-    if (refreshCounter++ >= 10) {
-      display_Data(Data22, Data23);
-      refreshCounter = 0;
-    }
+    display_Data(Data22, Data23);
   }
-  display_Data(Data22, Data23);  // แสดงค่าสุดท้ายเมื่อเสร็จสิ้น
 }
 
 
 void display_Data(int temp22, int temp23) {
-  digitalWrite(pin_stsLED, sts_LED);
-  sts_LED = 1 - sts_LED;
-  startTime = millis();
-
   tm.displayHex(7, temp23 % 10);
   temp23 /= 10;
   tm.displayHex(6, temp23 % 10);
