@@ -1,0 +1,35 @@
+ต่อจากตัวทดลองให้  Baud rate ไปใช้ Timer2
+# ที่ mySerial.A51
+- ตั้ง TMOD 	เป็น 0000 0101B (05H)
+- ตั้ง SCON	เป็น 0101 0000B (50H)
+- ตั้ง T2CON	เป็น 0011 1000B (34H)		[TF2	EXF2	RCLK	TCLK	EXEN2	TR2		C/T2	CP/RL2]
+คำนวน Baud rate จากสมการ 65536 - (fq / (32 * Baud))
+EX. RCAP2 = 65536 - (11.0592 / (32 * 9600)) = 65500 => FFDCH
+- MOV	TCAPH2,0FFH
+- MOV	TCAPL2,0DCH
+
+# ที่ Serial.asm
+>> ที่ Label PortO_LEDGreen
+ให้นำ 3 บรรทัดนี้ออก
+	MOV	DPTR,#1234H	
+	MOV	CounterH,DPH
+	MOV	CounterL,DPL
+>> ที่ Label Main_Loop
+ให้เพิ่ม 2 บรรทัดนี้เข้ามา
+	MOV	CounterH,TH0
+	MOV	CounterL,TL0
+	**** โค้ดเดิม ****
+	MOV	DPTR,#Header_Fram	
+	CALL	Send_Table
+	...
+	...
+	...
+	...
+	CALL	Send_LineFeed	
+	CPL	PortO_LEDGreen
+และลบ 5 บรรดที้นี้ออกไป
+	;MOV	DPH,CounterH
+	;MOV	DPL,CounterL
+	;INC	DPTR
+	;MOV	CounterH,DPH
+	;MOV	CounterL,DPL

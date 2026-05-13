@@ -1,0 +1,101 @@
+
+Send_2_Dot:
+	MOV	R0,#DataBuffer+1
+	MOV	R7,#8
+_ReadBuffer:
+	CLR	A
+	MOVC	A,@A+DPTR
+	MOV	@R0,A
+	INC	R0
+	INC	DPTR
+	DJNZ	R7,_ReadBuffer
+	
+_Send_2_Max7219:
+	MOV	DPH,#1
+	MOV	DPL,DataBuffer+1
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#2
+	MOV	DPL,DataBuffer+2
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#3
+	MOV	DPL,DataBuffer+3
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#4
+	MOV	DPL,DataBuffer+4
+	CALL	Send_DPTR2MAX7219
+
+	MOV	DPH,#5
+	MOV	DPL,DataBuffer+5
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#6
+	MOV	DPL,DataBuffer+6
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#7
+	MOV	DPL,DataBuffer+7
+	CALL	Send_DPTR2MAX7219
+	MOV	DPH,#8
+	MOV	DPL,DataBuffer+8
+	CALL	Send_DPTR2MAX7219
+	
+	RET	
+
+		
+Initial_Max7219:
+	MOV	DPTR,#0B07H; // B=Scan {0-7 Position}
+	CALL	Send_DPTR2MAX7219
+	MOV	DPTR,#0900H; // 9=Mode {00=NoCode,ff=code}
+       	CALL	Send_DPTR2MAX7219
+	MOV	DPTR,#0F00H; // F=Test {0,1}
+       	CALL	Send_DPTR2MAX7219
+	MOV	DPTR,#0A08H; // A=Intensity = 8/15
+       	CALL	Send_DPTR2MAX7219
+	MOV	DPTR,#0C01H; // c=shutdown {0,1}
+        CALL	Send_DPTR2MAX7219
+	RET
+	
+MAX7219_Display_Test:	
+	MOV	DPTR,#0F01H		;0F01 : Display Test
+	CALL	Send_DPTR2MAX7219	
+	CALL	myDelay
+	MOV	DPTR,#0F00H		;0F00 : Display Normal
+	CALL	Send_DPTR2MAX7219
+	RET
+
+Send_DPTR2MAX7219:
+	SETB	MxBoard_DIN
+	SETB	MxBoard_CLK
+	CLR	MxBoard_CS
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	MOV	A,DPH
+	CALL	_Send_DPTR2MAX7219_8Bit
+	MOV	A,DPL
+	CALL	_Send_DPTR2MAX7219_8Bit
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	SETB	MxBoard_DIN
+	SETB	MxBoard_CLK
+	SETB	MxBoard_CS
+	RET
+	
+_Send_DPTR2MAX7219_8Bit:	
+	MOV	R7,#8
+_ShiftBit_DPTR2MAX7219:
+	RLC	A
+	MOV	MxBoard_DIN,C
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	CLR	MxBoard_CLK	
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	DB	0,0,0,0,0,0,0,0,0,0,0,0
+	SETB	MxBoard_CLK	
+	DJNZ	R7,_ShiftBit_DPTR2MAX7219	
+	RET
+	
+myDelay:CLR	A
+	MOV	B,A
+	MOV	R7,#5
+_DLY00:	DJNZ	Acc,_DLY00
+	DJNZ	B,_DLY00
+	DJNZ	R7,_DLY00
+	RET
